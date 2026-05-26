@@ -62,9 +62,17 @@ public interface BlueberryDevicesConstants {
 	 */
 	public static final int GPIO_PINS_MESSAGE_KEY = 0x424471ef;
 	/**
+	 *  A message to define an I2C transaction to be sent out
+	 */
+	public static final int I_2_C_TRANSACTION_MESSAGE_KEY = 0x424426ed;
+	/**
 	 * A message to convey the unique ID of this devices
 	 */
 	public static final int ID_MESSAGE_KEY = 0x42448ca5;
+	/**
+	 * A message to convey one or more coordinates
+	 */
+	public static final int IMU_DATA_MESSAGE_KEY = 0x424465a1;
 	/**
 	 * A message to convey setup parameters for the oscope module
 	 */
@@ -87,9 +95,14 @@ public interface BlueberryDevicesConstants {
 	 */
 	public static final int THERMISTOR_DATA_MESSAGE_KEY = 0x4244d51a;
 	/**
-	 * A message to convey the unique ID of this devices
+	 * A message for time synchronization.
+	 * This message will likely be deprecated soon. 
 	 */
 	public static final int TIME_MESSAGE_KEY = 0x42443c5b;
+	/**
+	 * An improved message for time synchronization that uses the new Time64 deined type
+	 */
+	public static final int TIME_SYNC_MESSAGE_KEY = 0x4244767d;
 	/**
 	 * A message to convey hardware and firmware versions in addition to hardware type
 	 */
@@ -112,13 +125,16 @@ public interface BlueberryDevicesConstants {
 	public static final String FLASH_PROGRAM_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/flash_program";
 	public static final String GPIO_CONFIG_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/gpio-pin-config";
 	public static final String GPIO_PINS_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/gpio-pins";
+	public static final String I_2_C_TRANSACTION_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/i2c-transaction";
 	public static final String ID_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/id";
+	public static final String IMU_DATA_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/imu-data";
 	public static final String OSCOPE_CONFIG_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/oscope-config";
 	public static final String OSCOPE_DATA_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/oscope-data";
 	public static final String SPI_TRANSACTION_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/spi-transaction";
 	public static final String THERMISTOR_CONFIG_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/thermistor-config";
 	public static final String THERMISTOR_DATA_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/thermistor-data";
 	public static final String TIME_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/time";
+	public static final String TIME_SYNC_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/timesync";
 	public static final String VERSION_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/version";
 	public static final String WHOS_THERE_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/whos-there";
 
@@ -302,6 +318,10 @@ public interface BlueberryDevicesConstants {
 		METRES_PER_SECOND((byte)0x0003),
 		RADIANS_PER_SECOND((byte)0x0004),
 		DEGREES((byte)0x0005),
+		METRES_PER_SECOND_SQUARED((byte)0x0006),
+		RADIANS_PER_SECOND_SQUARED((byte)0x0007),
+		NEWTONS((byte)0x0008),
+		NEWTON_METRES((byte)0x0009),
 		;
 		private static EnumLookup<UnitEnum> m_lookup = new EnumLookup<UnitEnum>();
 		private int value;
@@ -415,6 +435,30 @@ public interface BlueberryDevicesConstants {
 		public static GpioDirEnum lookup(int i){
 			if(m_lookup.size() == 0) {
 				for(GpioDirEnum e : values()) {
+					m_lookup.add(e.getValue(), e);
+				}
+			}
+			return m_lookup.lookup(i);
+		}
+	}
+	public enum I2CDevBbEnum {
+		I2CNULL_DEV((byte)0x00ff),
+		I2C1_DEV((byte)0x0000),
+		I2C2_DEV((byte)0x0001),
+		I2C3_DEV((byte)0x0002),
+		I2C4_DEV((byte)0x0003),
+		;
+		private static EnumLookup<I2CDevBbEnum> m_lookup = new EnumLookup<I2CDevBbEnum>();
+		private int value;
+		private I2CDevBbEnum(int v){
+			value = v;
+		}
+		public int getValue(){
+			return value;
+		}
+		public static I2CDevBbEnum lookup(int i){
+			if(m_lookup.size() == 0) {
+				for(I2CDevBbEnum e : values()) {
 					m_lookup.add(e.getValue(), e);
 				}
 			}
