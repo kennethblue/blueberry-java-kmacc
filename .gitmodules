@@ -1,0 +1,3 @@
+[submodule "blueberry-transcode-java"]
+	path = blueberry-transcode-java
+	url = git@github.com:bluerobotics/blueberry-transcode-java.git
