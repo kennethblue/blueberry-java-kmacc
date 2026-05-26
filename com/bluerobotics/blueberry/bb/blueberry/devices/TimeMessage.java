@@ -55,7 +55,8 @@ public class TimeMessage extends BlueberryMessage implements BlueberryDevicesCon
 	 * This does the bare minimum: it just wraps a buffer in a message.
 	 * This is private so it should never be called outside of this class.
 	 * The intent is that the static factory methods would be used instead.
-	 * A message to convey the unique ID of this devices
+	 * A message for time synchronization.
+	 * This message will likely be deprecated soon. 
 	 * @param buf - the message buffer to add the message to
 	 */
 	private TimeMessage(BlueberryBuffer buf) {
@@ -63,7 +64,8 @@ public class TimeMessage extends BlueberryMessage implements BlueberryDevicesCon
 	}
 	/**
 	 * A constructor to create a TimeMessage for transmission.
-	 * A message to convey the unique ID of this devices
+	 * A message for time synchronization.
+	 * This message will likely be deprecated soon. 
 	 * @param buf - the message buffer to add the message to
 	 * @param hostTime - time in milliseconds from program start according to the bus controller
 	 * @param localTime - time in milliseconds from program start according to sender of this packet
@@ -77,7 +79,8 @@ public class TimeMessage extends BlueberryMessage implements BlueberryDevicesCon
 	}
 	/**
 	 * A constructor to create an empty TimeMessage for transmission.
-	 * A message to convey the unique ID of this devices
+	 * A message for time synchronization.
+	 * This message will likely be deprecated soon. 
 	 * @param buf - the message buffer to add the message to
 	 */
 	public static TimeMessage makeEmpty(BlueberryBuffer buf) {
@@ -87,7 +90,8 @@ public class TimeMessage extends BlueberryMessage implements BlueberryDevicesCon
 	}
 	/**
 	 * A method to wrap a buffer of received data in a TimeMessage.
-	 * A message to convey the unique ID of this devices
+	 * A message for time synchronization.
+	 * This message will likely be deprecated soon. 
 	 * @param buf - the message buffer to add the message to
 	 */
 	public static TimeMessage wrap(BlueberryBuffer buf) {
@@ -99,7 +103,8 @@ public class TimeMessage extends BlueberryMessage implements BlueberryDevicesCon
 	}
 	/**
 	 * Tests if the current message ha all defined fields present.
-	 * A message to convey the unique ID of this devices
+	 * A message for time synchronization.
+	 * This message will likely be deprecated soon. 
 	 */
 	public boolean isFull(){
 		return getMaxOrdinal() >= TIME_MESSAGE_MAX_ORDINAL;
