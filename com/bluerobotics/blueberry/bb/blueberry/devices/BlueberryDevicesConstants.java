@@ -83,6 +83,17 @@ public interface BlueberryDevicesConstants {
 	 */
 	public static final int OSCOPE_DATA_MESSAGE_KEY = 0x4244831d;
 	/**
+	 * A message to convey a single A-scan of sonar data
+	 * This doesn't contain any info about the data, like what transmit pulse was used or whatever
+	 * Let's assume for now that info will be transferred some other way
+	 * This message assumes that the  total a-scan will be sent over multiple messages
+	 * This message can be used as a request if captureId and firstSample index are specified and zero
+	 * In this case, sampleRate and data can be NAN, empty respectively, but they don't really matter
+	 * It is assumed that a device will not respond right away if it doesn't have data yet, 
+	 * instead it will simply drop the message and wait for a subsequent one.
+	 */
+	public static final int SONAR_A_SCAN_MESSAGE_KEY = 0x4244c136;
+	/**
 	 *  A message to define an SPI transaction to be sent out
 	 */
 	public static final int SPI_TRANSACTION_MESSAGE_KEY = 0x424425ed;
@@ -130,6 +141,7 @@ public interface BlueberryDevicesConstants {
 	public static final String IMU_DATA_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/imu-data";
 	public static final String OSCOPE_CONFIG_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/oscope-config";
 	public static final String OSCOPE_DATA_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/oscope-data";
+	public static final String SONAR_A_SCAN_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/sonar-a-scan";
 	public static final String SPI_TRANSACTION_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/spi-transaction";
 	public static final String THERMISTOR_CONFIG_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/thermistor-config";
 	public static final String THERMISTOR_DATA_MESSAGE_TOPIC = "blueberry/devices/{device_type}/{nid}/thermistor-data";
@@ -482,6 +494,32 @@ public interface BlueberryDevicesConstants {
 		public static TriggerPosEnum lookup(int i){
 			if(m_lookup.size() == 0) {
 				for(TriggerPosEnum e : values()) {
+					m_lookup.add(e.getValue(), e);
+				}
+			}
+			return m_lookup.lookup(i);
+		}
+	}
+	/**
+	 * An enum for conveying the type of data in an A-scan
+	 */
+	public enum AScanTypeEnum {
+		UNDEFINED((byte)0x0000),
+		RAW_RF((byte)0x0001),
+		IQ_DEMOD((byte)0x0002),
+		RECTIFIER_DEMOD((byte)0x0003),
+		;
+		private static EnumLookup<AScanTypeEnum> m_lookup = new EnumLookup<AScanTypeEnum>();
+		private int value;
+		private AScanTypeEnum(int v){
+			value = v;
+		}
+		public int getValue(){
+			return value;
+		}
+		public static AScanTypeEnum lookup(int i){
+			if(m_lookup.size() == 0) {
+				for(AScanTypeEnum e : values()) {
 					m_lookup.add(e.getValue(), e);
 				}
 			}
