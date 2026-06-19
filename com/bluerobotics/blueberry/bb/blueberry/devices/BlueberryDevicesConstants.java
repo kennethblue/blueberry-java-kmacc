@@ -64,7 +64,7 @@ public interface BlueberryDevicesConstants {
 	/**
 	 *  A message to define an I2C transaction to be sent out
 	 */
-	public static final int I_2_C_TRANSACTION_MESSAGE_KEY = 0x424426ed;
+	public static final int I_2_C_TRANSACTION_MESSAGE_KEY = 0x424435b1;
 	/**
 	 * A message to convey the unique ID of this devices
 	 */
@@ -575,6 +575,7 @@ public interface BlueberryDevicesConstants {
 		BLUE_ESC((short)0x0004),
 		GIGABOARD((short)0x0005),
 		BLUE_BRIDGE((short)0x0006),
+		POGOBRAIN((short)0x0007),
 		;
 		private static EnumLookup<HwTypeEnum> m_lookup = new EnumLookup<HwTypeEnum>();
 		private int value;
