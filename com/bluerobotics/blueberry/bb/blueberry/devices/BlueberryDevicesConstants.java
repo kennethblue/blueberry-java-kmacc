@@ -519,7 +519,9 @@ public interface BlueberryDevicesConstants {
 		IQ_DEMOD((byte)0x0002),
 		RECTIFIER_DEMOD((byte)0x0003),
 		MIN_MAX((byte)0x0004),
-		RAW_CURRENT((byte)0x0005),
+		CURRENT((byte)0x0005),
+		CURRENT_SWEEP((byte)0x0006),
+		RAW_CURRENT((byte)0x0007),
 		;
 		private static EnumLookup<AScanTypeEnum> m_lookup = new EnumLookup<AScanTypeEnum>();
 		private int value;

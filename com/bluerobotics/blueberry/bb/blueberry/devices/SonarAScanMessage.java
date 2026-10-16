@@ -36,15 +36,16 @@ import com.bluerobotics.blueberry.transcoder.java.BlueberryBuffer;
  * A class to read and write a SonarAScanMessage
  */
 public class SonarAScanMessage extends BlueberryMessage implements BlueberryDevicesConstants {
-	private static final int SONAR_A_SCAN_MESSAGE_MAX_ORDINAL = 8;
+	private static final int SONAR_A_SCAN_MESSAGE_MAX_ORDINAL = 9;
 
-	private static final int SONAR_A_SCAN_MESSAGE_LENGTH = 32;
+	private static final int SONAR_A_SCAN_MESSAGE_LENGTH = 36;
 
 	//These values are used to index into this message to access the various fields.
 	private static final int SONAR_A_SCAN_MESSAGE_CAPTURE_ID_INDEX = 8;
 	private static final int SONAR_A_SCAN_MESSAGE_DATA_PLACEHOLDER_INDEX = 24;
 	private static final int SONAR_A_SCAN_MESSAGE_FIRST_SAMPLE_INDEX_INDEX = 12;
 	private static final int SONAR_A_SCAN_MESSAGE_SAMPLE_RATE_INDEX = 20;
+	private static final int SONAR_A_SCAN_MESSAGE_START_INDEX = 32;
 	private static final int SONAR_A_SCAN_MESSAGE_TOTAL_SAMPLE_NUM_INDEX = 16;
 	private static final int SONAR_A_SCAN_MESSAGE_TYPE_INDEX = 28;
 
@@ -53,6 +54,7 @@ public class SonarAScanMessage extends BlueberryMessage implements BlueberryDevi
 	private static final int SONAR_A_SCAN_MESSAGE_CAPTURE_ID_ORDINAL = 3;
 	private static final int SONAR_A_SCAN_MESSAGE_FIRST_SAMPLE_INDEX_ORDINAL = 4;
 	private static final int SONAR_A_SCAN_MESSAGE_SAMPLE_RATE_ORDINAL = 6;
+	private static final int SONAR_A_SCAN_MESSAGE_START_ORDINAL = 9;
 	private static final int SONAR_A_SCAN_MESSAGE_TOTAL_SAMPLE_NUM_ORDINAL = 5;
 	private static final int SONAR_A_SCAN_MESSAGE_TYPE_ORDINAL = 8;
 
@@ -94,8 +96,9 @@ public class SonarAScanMessage extends BlueberryMessage implements BlueberryDevi
 	 * @param totalSampleNum - the number of datapoints in this data set. This is defined by the device
 	 * @param sampleRate - the sample rate reported from the data source
 	 * @param type - An enum for conveying the type of data in an A-scan
+	 * @param start - the x-offset of the first value. This could be in units of time or frequency, depending on type.
 	 */
-	public static SonarAScanMessage make(BlueberryBuffer buf, long captureId, long firstSampleIndex, long totalSampleNum, double sampleRate, AScanTypeEnum type) {
+	public static SonarAScanMessage make(BlueberryBuffer buf, long captureId, long firstSampleIndex, long totalSampleNum, double sampleRate, AScanTypeEnum type, double start) {
 		SonarAScanMessage msg = new SonarAScanMessage(buf);
 		msg.setupHeader(SONAR_A_SCAN_MESSAGE_KEY, SONAR_A_SCAN_MESSAGE_MAX_ORDINAL, SONAR_A_SCAN_MESSAGE_LENGTH);
 		msg.m_buf.writeUint32(SONAR_A_SCAN_MESSAGE_CAPTURE_ID_INDEX, captureId);
@@ -103,6 +106,7 @@ public class SonarAScanMessage extends BlueberryMessage implements BlueberryDevi
 		msg.m_buf.writeUint32(SONAR_A_SCAN_MESSAGE_TOTAL_SAMPLE_NUM_INDEX, totalSampleNum);
 		msg.m_buf.writeFloat32(SONAR_A_SCAN_MESSAGE_SAMPLE_RATE_INDEX, sampleRate);
 		msg.m_buf.writeUint8(SONAR_A_SCAN_MESSAGE_TYPE_INDEX, type.getValue());
+		msg.m_buf.writeFloat32(SONAR_A_SCAN_MESSAGE_START_INDEX, start);
 		msg.m_buf.writeUint16(SONAR_A_SCAN_MESSAGE_DATA_PLACEHOLDER_INDEX, INVALID_BLOCK);//clear sequence header
 		return msg;
 	}
@@ -259,6 +263,22 @@ public class SonarAScanMessage extends BlueberryMessage implements BlueberryDevi
 	 */
 	boolean isTypePresent(){
 		return SONAR_A_SCAN_MESSAGE_TYPE_ORDINAL <= (getMaxOrdinal());
+	}
+	/**
+	 * A getter for the start field
+	 * the x-offset of the first value. This could be in units of time or frequency, depending on type.
+	 */
+	public double getStart(){
+		int i = 0;
+		i = i + SONAR_A_SCAN_MESSAGE_START_INDEX;
+		return m_buf.readFloat32(i );
+	}
+	/**
+	 * Tests if the current message containts the start field
+	 * the x-offset of the first value. This could be in units of time or frequency, depending on type.
+	 */
+	boolean isStartPresent(){
+		return SONAR_A_SCAN_MESSAGE_START_ORDINAL <= (getMaxOrdinal());
 	}
 	/**
 	 * A function to initialize a Float Sequence
