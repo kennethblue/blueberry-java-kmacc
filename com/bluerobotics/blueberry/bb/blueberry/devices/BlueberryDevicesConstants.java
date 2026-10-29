@@ -522,6 +522,8 @@ public interface BlueberryDevicesConstants {
 		CURRENT((byte)0x0005),
 		CURRENT_SWEEP((byte)0x0006),
 		RAW_CURRENT((byte)0x0007),
+		CODED((byte)0x0008),
+		CODED_IQ((byte)0x0009),
 		;
 		private static EnumLookup<AScanTypeEnum> m_lookup = new EnumLookup<AScanTypeEnum>();
 		private int value;
