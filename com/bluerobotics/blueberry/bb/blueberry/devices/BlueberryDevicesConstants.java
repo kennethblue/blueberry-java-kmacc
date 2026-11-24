@@ -528,6 +528,7 @@ public interface BlueberryDevicesConstants {
 		TX((byte)0x000b),
 		TX_SWEEP((byte)0x000c),
 		TX_RAW((byte)0x000d),
+		CHIRP1((byte)0x000e),
 		;
 		private static EnumLookup<AScanTypeEnum> m_lookup = new EnumLookup<AScanTypeEnum>();
 		private int value;
